@@ -3,8 +3,8 @@ import { db } from '@/lib/firebase'
 import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
 import useSWRSubscription from 'swr/subscription'
  
-export function useAuthors() {
-  const { data ,error} = useSWRSubscription(['authors'], ([path], { next }) => {
+export function usePosts() {
+  const { data ,error} = useSWRSubscription(['posts'], ([path], { next }) => {
     const ref = collection(db,path);
     const unsub = onSnapshot(ref,(snaps)=>
     {
@@ -22,6 +22,6 @@ export function useAuthors() {
     isLoading: data === undefined ? true : false
   }
 }
-export const getAuthors = async (id)=>{
- return await getDoc(doc(db,`authors/${id}`))
+export const getPosts = async (id)=>{
+ return await getDoc(doc(db,`posts/${id}`))
 }

@@ -1,14 +1,14 @@
 "use client";
 
-import { getCategory } from "@/lib/firebase/category/read";
-import { createNewCategory, deleteCategory, updateCategory } from "@/lib/firebase/category/write";
+import { getPosts } from "@/lib/firebase/posts/read";
+import { createNewPosts, deletePosts, updatePosts } from "@/lib/firebase/posts/write";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useState } from "react";
 
 // Corrected component name
-const CategoryFormContext = createContext();
+const PostsFormContext = createContext();
 
-export default function CategoryFormContextProvider({ children }) {
+export default function PostsFormContextProvider({ children }) {
     const router  = useRouter();
     // const searchParams = useSearchParams();
     // const updateCategoryId = searchParams.get('id');
@@ -31,7 +31,7 @@ export default function CategoryFormContextProvider({ children }) {
         setLoading(true);
         setDone(false);
         try {
-            await createNewCategory({ data, image });
+            await createNewPosts({ data, image });
             setDone(true);
         } catch (error) {
             setError(error?.message || "An error occurred"); // Provide a default error message
@@ -45,7 +45,7 @@ export default function CategoryFormContextProvider({ children }) {
         setLoading(true);
         setDone(false);
         try {
-            await updateCategory({ data, image });
+            await updatePosts({ data, image });
             setDone(true);
         } catch (error) {
             setError(error?.message || "An error occurred"); // Provide a default error message
@@ -58,8 +58,8 @@ export default function CategoryFormContextProvider({ children }) {
         setLoading(true);
         setDone(false);
         try {
-            await deleteCategory(id);
-            router.push('/admin/categories');
+            await deletePosts(id);
+            router.push('/admin/posts');
             setDone(true);
         } catch (error) {
             setError(error?.message || "An error occurred"); // Provide a default error message
@@ -73,13 +73,13 @@ export default function CategoryFormContextProvider({ children }) {
         setLoading(true);
         setDone(false);
         try {
-            const res = await getCategory(id);
+            const res = await getPosts(id);
             if(res.exists())
             {
                 setData(res.data());
             }else
             {
-                throw new Error("No category exists");
+                throw new Error("No posts exists");
             }
             // setDone(true);
         } catch (error) {
@@ -88,7 +88,7 @@ export default function CategoryFormContextProvider({ children }) {
         setLoading(false);
     }
     return (
-        <CategoryFormContext.Provider
+        <PostsFormContext.Provider
             value={{
                 data,
                 isLoading,
@@ -105,8 +105,8 @@ export default function CategoryFormContextProvider({ children }) {
             }}
         >
             {children}
-        </CategoryFormContext.Provider>
+        </PostsFormContext.Provider>
     );
 }
 
-export const useCategoryForm = () => useContext(CategoryFormContext);
+export const usePostsForm = () => useContext(PostsFormContext);

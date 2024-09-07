@@ -1,8 +1,8 @@
 "use client";
 
 import React, { Suspense, useEffect } from "react";
-import { useCategoryForm } from "./context/CategoryFormContext";
 import { useSearchParams } from "next/navigation";
+import { useAuthorForm } from "./context/AuthorFormContext";
 
 export default function Page() {
   const {
@@ -16,22 +16,21 @@ export default function Page() {
     handleData,
     handleCreate,
     // updateCategoryId,
-
     handleUpdate,
     handleDelete
-  } = useCategoryForm();
+  } = useAuthorForm();
 
   const searchParams = useSearchParams();
-    const updateCategoryId = searchParams.get('id');
+    const updateAuthorId = searchParams.get('id');
   useEffect(() => {
-    if (updateCategoryId) {
-      fetchData(updateCategoryId);
+    if (updateAuthorId) {
+      fetchData(updateAuthorId);
     }
-  }, [updateCategoryId]);
+  }, [updateAuthorId]);
   return (
     <main className="w-full p-6 flex flex-col gap-6">
       <h1 className="font-bold text-lg">Categories | Form</h1>
-      {updateCategoryId && (
+      {updateAuthorId && (
         <div>
           <h3 className="text-white bg-gray-400 rounded-full px-4 py-3 text-center">
             Update
@@ -42,7 +41,7 @@ export default function Page() {
         <form
           className="flex flex-col gap-2 rounded-xl p-7"
           onSubmit={(e) => {
-            if (updateCategoryId) {
+            if (updateAuthorId) {
               handleUpdate();
             } else {
               handleCreate();
@@ -52,11 +51,11 @@ export default function Page() {
         >
           <div className="flex flex-col gap-2 p-2">
             <label className="text-lg">
-              Category Name <span className="text-red-500">*</span>
+              Author Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              placeholder="Enter the Category Name"
+              placeholder="Enter the Author Name"
               className="px-4 py-4 rounded-full border"
               required
               onChange={(e) => {
@@ -68,17 +67,17 @@ export default function Page() {
 
           <div className="flex flex-col gap-2 p-2">
             <label className="text-lg">
-              Category Slug <span className="text-red-500">*</span>
+            Author Slug <span className="text-red-500">*</span>
             </label>
             <input
-              type="text"
-              placeholder="Enter the Category Slug"
+              type="email"
+              placeholder="Enter the Author Email"
               className="px-4 py-4 rounded-full border"
               required
               onChange={(e) => {
-                handleData("slug", e.target.value);
+                handleData("email", e.target.value);
               }}
-              value={data?.slug || ""}
+              value={data?.email || ""}
             />
           </div>
 
@@ -87,16 +86,16 @@ export default function Page() {
               <img
                 className="w-40"
                 src={URL.createObjectURL(image)}
-                alt="Category Preview"
+                alt="Author Preview"
               />
             </div>
           )}
-          {data?.iconURL && (
+          {data?.photoURL && (
             <div className="">
               <img
                 className="w-40"
-                src={data?.iconURL}
-                alt="Category Preview"
+                src={data?.photoURL}
+                alt="Author Preview"
               />
             </div>
           )}
@@ -125,18 +124,18 @@ export default function Page() {
             >
               {isLoading
                 ? "Loading.. "
-                : updateCategoryId
+                : updateAuthorId
                 ? "Update"
                 : "Create"}
             </button>
           )}
-          {updateCategoryId && !isDone && (
+          {updateAuthorId && !isDone && (
             <button
               disabled={isLoading || isDone}
               className="bg-black text-gray-50 px-4 py-4 rounded-lg"
               onClick={(e) => {
                 e.preventDefault();
-                handleDelete(updateCategoryId);
+                handleDelete(updateAuthorId);
               }}
             >
               {isLoading ? "Loading.. " : "Delete"}
@@ -144,7 +143,7 @@ export default function Page() {
           )}
           {isDone && (
             <h3 className="text-green-400 text-lg text-center">
-              Successfully {updateCategoryId ? "Update" : "Created"}{" "}
+              Successfully {updateAuthorId ? "Update" : "Created"}{" "}
             </h3>
           )}
         </form>

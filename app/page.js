@@ -1,7 +1,9 @@
+import PostListView from "./components/PostListView";
+
 export default function Home() {
   return (
     <main>
-      <h1>HorizonView</h1>
+      <PostListView/>
     </main>
   );
 }
